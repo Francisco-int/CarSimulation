@@ -15843,6 +15843,8 @@ MonoBehaviour:
   rampPlacer: {fileID: 194276272}
   infoText: {fileID: 475080556}
   distanceInputField: {fileID: 233945098}
+  distanceMin: 1
+  distanceMax: 100
 --- !u!4 &1543633369 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5793744826573779403, guid: a18dac63d9e6cbd4eaad9e9faab3ee0a, type: 3}
@@ -20000,7 +20002,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Rampa
+  m_Text: 'Wall
+
+'
 --- !u!222 &2030581485
 CanvasRenderer:
   m_ObjectHideFlags: 0

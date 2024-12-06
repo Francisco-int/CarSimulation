@@ -1738,7 +1738,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 22
+    m_FontSize: 21
     m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 10
@@ -2501,7 +2501,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!65 &237362501
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12476,7 +12476,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 22
+    m_FontSize: 21
     m_FontStyle: 2
     m_BestFit: 0
     m_MinSize: 10
@@ -12555,7 +12555,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 23
+    m_FontSize: 21
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -13323,7 +13323,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 23
+    m_FontSize: 21
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 2
@@ -17095,7 +17095,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Push
+  m_Text: 'Wall
+
+'
 --- !u!222 &1706477491
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19098,6 +19100,10 @@ MonoBehaviour:
   infoText: {fileID: 223890647}
   massInputField: {fileID: 1517524551}
   accelerationInputField: {fileID: 1500890459}
+  massMin: 1
+  massMax: 100
+  accelerationMin: 0.1
+  accelerationMax: 50
 --- !u!4 &1952853996 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5793744826573779403, guid: a18dac63d9e6cbd4eaad9e9faab3ee0a, type: 3}

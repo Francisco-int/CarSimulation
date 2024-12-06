@@ -44,8 +44,8 @@ public abstract class DataSender : MonoBehaviour
 
     public void SendData()
     {
-        dataCounter++;
-        string uniqueKey = $"Data{dataCounter}";
+        // Generar una clave única basada en la fecha y hora actuales, separadas por un guion medio.
+        string uniqueKey = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
         object data = CreateTestData();
 
@@ -61,6 +61,7 @@ public abstract class DataSender : MonoBehaviour
             }
         });
     }
+
 
     private string BuildURL(string uniqueKey)
     {

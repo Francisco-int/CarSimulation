@@ -10,6 +10,10 @@ public class RampInfoDisplay : MonoBehaviour
     public Text infoText; // Componente UI para mostrar la información
     public InputField distanceInputField; // Campo de entrada para la distancia entre rampas
 
+    [Header("Límites de valores")]
+    public float distanceMin = 1f; // Distancia mínima entre rampas
+    public float distanceMax = 100f; // Distancia máxima entre rampas
+
     private void Start()
     {
         if (rampPlacer == null)
@@ -31,7 +35,7 @@ public class RampInfoDisplay : MonoBehaviour
         }
 
         // Inicializar el valor de la distancia con el valor actual
-        distanceInputField.text = rampPlacer.distanceBetweenRamps.ToString();
+        distanceInputField.text = rampPlacer.distanceBetweenRamps.ToString("F1");
 
         // Configurar el listener del Input Field
         distanceInputField.onEndEdit.AddListener(OnDistanceChanged);
@@ -53,7 +57,7 @@ public class RampInfoDisplay : MonoBehaviour
         infoText.text = $"Prueba: Rampas\n{ramp1Position}\n{distanceBetweenRamps}";
     }
 
-    void Update()
+    private void Update()
     {
         // Actualizar la información cada cuadro
         UpdateInfoDisplay();
@@ -66,15 +70,22 @@ public class RampInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(newDistance, out float newValue))
         {
-            rampPlacer.distanceBetweenRamps = newValue; // Actualizar la distancia entre rampas
-            rampPlacer.UpdateRampPositions(); // Actualizar las posiciones de las rampas después de cambiar la distancia
+            // Restringir el valor a los límites definidos
+            newValue = Mathf.Clamp(newValue, distanceMin, distanceMax);
+
+            // Actualizar la distancia entre rampas
+            rampPlacer.distanceBetweenRamps = newValue;
+
+            // Actualizar las posiciones de las rampas después de cambiar la distancia
+            rampPlacer.UpdateRampPositions();
+
+            // Asegurar que el Input Field muestra el valor clamped
+            distanceInputField.text = newValue.ToString("F1");
         }
         else
         {
             Debug.LogWarning("Valor de distancia no válido. Se mantiene el valor anterior.");
+            distanceInputField.text = rampPlacer.distanceBetweenRamps.ToString("F1");
         }
     }
 }
-
-
-

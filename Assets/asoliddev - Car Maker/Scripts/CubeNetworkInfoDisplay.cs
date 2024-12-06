@@ -11,6 +11,12 @@ public class CubeNetworkInfoDisplay : MonoBehaviour
     public InputField massInputField; // InputField para modificar la masa del cubo
     public InputField forceInputField; // InputField para modificar la fuerza de unión del joint
 
+    [Header("Límites de valores")]
+    public float massMin = 0.1f; // Masa mínima permitida para un cubo
+    public float massMax = 100f; // Masa máxima permitida para un cubo
+    public float forceMin = 10f; // Fuerza mínima permitida para los joints
+    public float forceMax = 1000f; // Fuerza máxima permitida para los joints
+
     private float singleCubeMass = 0f;
     private float jointBreakForce = 0f;
 
@@ -41,8 +47,8 @@ public class CubeNetworkInfoDisplay : MonoBehaviour
         UpdateInfoDisplay();
 
         // Configurar los valores de los InputFields
-        massInputField.text = singleCubeMass.ToString();
-        forceInputField.text = jointBreakForce.ToString();
+        massInputField.text = singleCubeMass.ToString("F1");
+        forceInputField.text = jointBreakForce.ToString("F1");
 
         // Agregar listeners para actualizar los valores cuando se cambien en el InputField
         massInputField.onEndEdit.AddListener(OnMassInputChanged);
@@ -75,14 +81,21 @@ public class CubeNetworkInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(value, out float newMass))
         {
+            // Restringir el valor a los límites definidos
+            newMass = Mathf.Clamp(newMass, massMin, massMax);
             singleCubeMass = newMass;
-            // Llamar al método de CubeNetworkGenerator para actualizar la masa y regenerar la red
+
+            // Actualizar propiedades en el generador
             cubeNetworkGenerator.UpdateCubeProperties(singleCubeMass, jointBreakForce);
+
+            // Actualizar la UI
+            massInputField.text = singleCubeMass.ToString("F1");
             UpdateInfoDisplay();
         }
         else
         {
             Debug.LogError("Entrada no válida para la masa.");
+            massInputField.text = singleCubeMass.ToString("F1");
         }
     }
 
@@ -93,14 +106,21 @@ public class CubeNetworkInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(value, out float newForce))
         {
+            // Restringir el valor a los límites definidos
+            newForce = Mathf.Clamp(newForce, forceMin, forceMax);
             jointBreakForce = newForce;
-            // Llamar al método de CubeNetworkGenerator para actualizar la fuerza y regenerar la red
+
+            // Actualizar propiedades en el generador
             cubeNetworkGenerator.UpdateCubeProperties(singleCubeMass, jointBreakForce);
+
+            // Actualizar la UI
+            forceInputField.text = jointBreakForce.ToString("F1");
             UpdateInfoDisplay();
         }
         else
         {
             Debug.LogError("Entrada no válida para la fuerza de unión.");
+            forceInputField.text = jointBreakForce.ToString("F1");
         }
     }
 }

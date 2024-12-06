@@ -12695,7 +12695,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Pull
+  m_Text: 'Wall
 
 '
 --- !u!222 &1314033666
@@ -12780,6 +12780,10 @@ MonoBehaviour:
   infoText: {fileID: 596940482}
   massInputField: {fileID: 1501570646}
   springForceInputField: {fileID: 900029739}
+  massMin: 1
+  massMax: 100
+  springForceMin: 10
+  springForceMax: 1000
 --- !u!1001 &1346720148
 PrefabInstance:
   m_ObjectHideFlags: 0

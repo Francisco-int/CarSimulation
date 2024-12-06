@@ -11,6 +11,12 @@ public class CarDragCubeInfoDisplay : MonoBehaviour
     public InputField massInputField; // Campo de entrada para la masa del cubo
     public InputField springForceInputField; // Campo de entrada para la fuerza del resorte
 
+    [Header("Límites de valores")]
+    public float massMin = 1f; // Masa mínima
+    public float massMax = 100f; // Masa máxima
+    public float springForceMin = 10f; // Fuerza mínima del resorte
+    public float springForceMax = 1000f; // Fuerza máxima del resorte
+
     private void Start()
     {
         if (carDragCube == null)
@@ -25,19 +31,11 @@ public class CarDragCubeInfoDisplay : MonoBehaviour
             return;
         }
 
-        if (massInputField == null)
+        if (massInputField == null || springForceInputField == null)
         {
-            Debug.LogError("Por favor, asigna un Input Field para la masa.");
+            Debug.LogError("Por favor, asigna los Input Fields en los campos correspondientes.");
             return;
         }
-
-        if (springForceInputField == null)
-        {
-            Debug.LogError("Por favor, asigna un Input Field para la fuerza del resorte.");
-            return;
-        }
-
-
 
         // Inicializar los valores de los Input Fields con los valores actuales
         massInputField.text = carDragCube.cubeMass.ToString();
@@ -72,7 +70,7 @@ public class CarDragCubeInfoDisplay : MonoBehaviour
         infoText.text = $"Prueba: Arrastrar Cubo\nMasa del Cubo: {cubeMass:F1} kg\nFuerza del Resorte: {springForce:F1} N\nResistencia (Damper): {springDamper:F1}";
     }
 
-    void Update()
+    private void Update()
     {
         // Actualizar la información cada cuadro
         UpdateInfoDisplay();
@@ -85,12 +83,19 @@ public class CarDragCubeInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(newMass, out float newValue))
         {
-            carDragCube.cubeMass = newValue; // Actualizar la masa del cubo
-            carDragCube.UpdateCubeProperties(carDragCube.cubeMass, carDragCube.springForce, carDragCube.springDamper, carDragCube.maxDistance); // Llamar a UpdateCubeProperties
+            // Restringir el valor a los límites definidos
+            newValue = Mathf.Clamp(newValue, massMin, massMax);
+
+            // Actualizar la masa del cubo
+            carDragCube.cubeMass = newValue;
+            massInputField.text = newValue.ToString("F1"); // Asegurar que el campo muestra el valor clamped
+
+            carDragCube.UpdateCubeProperties(carDragCube.cubeMass, carDragCube.springForce, carDragCube.springDamper, carDragCube.maxDistance);
         }
         else
         {
             Debug.LogWarning("Valor de masa no válido. Se mantiene el valor anterior.");
+            massInputField.text = carDragCube.cubeMass.ToString("F1");
         }
     }
 
@@ -101,13 +106,19 @@ public class CarDragCubeInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(newSpringForce, out float newValue))
         {
-            carDragCube.springForce = newValue; // Actualizar la fuerza del resorte
-            carDragCube.UpdateCubeProperties(carDragCube.cubeMass, carDragCube.springForce, carDragCube.springDamper, carDragCube.maxDistance); // Llamar a UpdateCubeProperties
+            // Restringir el valor a los límites definidos
+            newValue = Mathf.Clamp(newValue, springForceMin, springForceMax);
+
+            // Actualizar la fuerza del resorte
+            carDragCube.springForce = newValue;
+            springForceInputField.text = newValue.ToString("F1"); // Asegurar que el campo muestra el valor clamped
+
+            carDragCube.UpdateCubeProperties(carDragCube.cubeMass, carDragCube.springForce, carDragCube.springDamper, carDragCube.maxDistance);
         }
         else
         {
             Debug.LogWarning("Valor de fuerza del resorte no válido. Se mantiene el valor anterior.");
+            springForceInputField.text = carDragCube.springForce.ToString("F1");
         }
     }
 }
-

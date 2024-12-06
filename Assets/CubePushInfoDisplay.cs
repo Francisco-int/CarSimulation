@@ -11,6 +11,12 @@ public class CubePushInfoDisplay : MonoBehaviour
     public InputField massInputField; // Campo de entrada para la masa del cubo
     public InputField accelerationInputField; // Campo de entrada para la aceleración del cubo
 
+    [Header("Límites de valores")]
+    public float massMin = 1f; // Masa mínima
+    public float massMax = 100f; // Masa máxima
+    public float accelerationMin = 0.1f; // Aceleración mínima
+    public float accelerationMax = 50f; // Aceleración máxima
+
     private void Start()
     {
         if (cubePush == null)
@@ -25,21 +31,15 @@ public class CubePushInfoDisplay : MonoBehaviour
             return;
         }
 
-        if (massInputField == null)
+        if (massInputField == null || accelerationInputField == null)
         {
-            Debug.LogError("Por favor, asigna un Input Field para la masa.");
-            return;
-        }
-
-        if (accelerationInputField == null)
-        {
-            Debug.LogError("Por favor, asigna un Input Field para la aceleración.");
+            Debug.LogError("Por favor, asigna los Input Fields en los campos correspondientes.");
             return;
         }
 
         // Inicializar los valores de los Input Fields con los valores actuales
-        massInputField.text = cubePush.cubeMass.ToString();
-        accelerationInputField.text = cubePush.cubeAcceleration.ToString();
+        massInputField.text = cubePush.cubeMass.ToString("F1");
+        accelerationInputField.text = cubePush.cubeAcceleration.ToString("F1");
 
         // Configurar los listeners de los Input Fields
         massInputField.onEndEdit.AddListener(OnMassChanged);
@@ -69,7 +69,7 @@ public class CubePushInfoDisplay : MonoBehaviour
         infoText.text = $"Prueba: Empujar Cubo\nMasa del Cubo: {cubeMass:F1} kg\nVelocidad del Cubo: {cubeSpeed:F1} km/h";
     }
 
-    void Update()
+    private void Update()
     {
         // Actualizar la información cada cuadro
         UpdateInfoDisplay();
@@ -82,11 +82,21 @@ public class CubePushInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(newMass, out float newValue))
         {
-            cubePush.cubeMass = newValue; // Actualizar la masa del cubo
+            // Restringir el valor a los límites definidos
+            newValue = Mathf.Clamp(newValue, massMin, massMax);
+
+            // Actualizar la masa del cubo
+            cubePush.cubeMass = newValue;
+            Rigidbody cubeRb = cubePush.cube.GetComponent<Rigidbody>();
+            cubeRb.mass = newValue;
+
+            // Asegurar que el Input Field muestra el valor clamped
+            massInputField.text = newValue.ToString("F1");
         }
         else
         {
             Debug.LogWarning("Valor de masa no válido. Se mantiene el valor anterior.");
+            massInputField.text = cubePush.cubeMass.ToString("F1");
         }
     }
 
@@ -97,13 +107,19 @@ public class CubePushInfoDisplay : MonoBehaviour
     {
         if (float.TryParse(newAcceleration, out float newValue))
         {
-            cubePush.cubeAcceleration = newValue; // Actualizar la aceleración del cubo
+            // Restringir el valor a los límites definidos
+            newValue = Mathf.Clamp(newValue, accelerationMin, accelerationMax);
+
+            // Actualizar la aceleración del cubo
+            cubePush.cubeAcceleration = newValue;
+
+            // Asegurar que el Input Field muestra el valor clamped
+            accelerationInputField.text = newValue.ToString("F1");
         }
         else
         {
             Debug.LogWarning("Valor de aceleración no válido. Se mantiene el valor anterior.");
+            accelerationInputField.text = cubePush.cubeAcceleration.ToString("F1");
         }
     }
 }
-
-
